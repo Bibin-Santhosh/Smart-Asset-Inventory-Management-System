@@ -1,44 +1,21 @@
-#!/usr/bin/env bash
-set -o errexit
-
-echo "Waiting for database to be ready..."
-
-python - << 'EOF'
-import time
-import psycopg2
-import os
-
-db_url = os.environ.get("DATABASE_URL")
-
-while True:
-    try:
-        psycopg2.connect(db_url)
-        print("Database is ready!")
-        break
-    except Exception:
-        print("Database not ready, waiting...")
-        time.sleep(3)
-EOF
-
-echo "Running migrations..."
-python manage.py migrate --noinput
-
-echo "Ensuring admin user and password..."
-
 python manage.py shell << 'EOF'
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
+from django.conf import settings
 import os
 
 User = get_user_model()
-
 USERNAME_FIELD = User.USERNAME_FIELD
 
 username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
 email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
 password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
 
-# Use the actual login field (username OR email)
 login_value = username if USERNAME_FIELD == "username" else email
+
+print("AUTH_USER_MODEL =", settings.AUTH_USER_MODEL)
+print("USERNAME_FIELD =", USERNAME_FIELD)
+print("AUTHENTICATION_BACKENDS =", settings.AUTHENTICATION_BACKENDS)
+print("LOGIN VALUE USED =", login_value)
 
 user, created = User.objects.get_or_create(
     **{USERNAME_FIELD: login_value},
@@ -50,8 +27,8 @@ user.is_superuser = True
 user.set_password(password)
 user.save()
 
-print(f"Admin ready using {USERNAME_FIELD}: {login_value}")
-EOF
+print("Admin ensured")
 
-echo "Starting Gunicorn..."
-gunicorn asset_management.wsgi:application
+test = authenticate(**{USERNAME_FIELD: login_value}, password=password)
+print("AUTHENTICATE RESULT =", test)
+EOF
