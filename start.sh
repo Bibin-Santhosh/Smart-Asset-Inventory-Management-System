@@ -23,5 +23,11 @@ EOF
 echo "Running migrations..."
 python manage.py migrate --noinput
 
+echo "Creating superuser if not exists..."
+python manage.py createsuperuser --noinput \
+  --username admin \
+  --email admin@example.com || true
+
+
 echo "Starting Gunicorn..."
 gunicorn asset_management.wsgi:application
