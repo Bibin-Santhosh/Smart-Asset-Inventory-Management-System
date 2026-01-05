@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7+7judv6q365v8rl*1wn609wj803#$6i05oq(lpi-n^dmqcct1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [    "smart-asset-management-bibi.onrender.com",
+]
 
 
 # Application definition
@@ -62,6 +63,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://smart-asset-frontend-bibi.onrender.com",
+]
 
 
 ROOT_URLCONF = 'asset_management.urls'
