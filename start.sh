@@ -31,12 +31,17 @@ import os
 
 User = get_user_model()
 
+USERNAME_FIELD = User.USERNAME_FIELD
+
 username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
 email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
 password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
 
+# Use the actual login field (username OR email)
+login_value = username if USERNAME_FIELD == "username" else email
+
 user, created = User.objects.get_or_create(
-    username=username,
+    **{USERNAME_FIELD: login_value},
     defaults={"email": email}
 )
 
@@ -45,7 +50,7 @@ user.is_superuser = True
 user.set_password(password)
 user.save()
 
-print("Admin user ready")
+print(f"Admin ready using {USERNAME_FIELD}: {login_value}")
 EOF
 
 echo "Starting Gunicorn..."
