@@ -22,4 +22,6 @@ RUN mkdir -p staticfiles
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn", "asset_management.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD python manage.py migrate && \
+    python manage.py create_admin && \
+    gunicorn asset_management.wsgi:application --bind 0.0.0.0:8000
