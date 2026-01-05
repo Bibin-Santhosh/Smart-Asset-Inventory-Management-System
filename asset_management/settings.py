@@ -150,3 +150,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-fallback-key")
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
