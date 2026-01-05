@@ -15,7 +15,7 @@ while True:
         psycopg2.connect(db_url)
         print("Database is ready!")
         break
-    except Exception as e:
+    except Exception:
         print("Database not ready, waiting...")
         time.sleep(3)
 EOF
@@ -23,11 +23,30 @@ EOF
 echo "Running migrations..."
 python manage.py migrate --noinput
 
-echo "Creating superuser if not exists..."
-python manage.py createsuperuser --noinput \
-  --username admin \
-  --email admin@example.com || true
+echo "Ensuring admin user and password..."
 
+python manage.py shell << 'EOF'
+from django.contrib.auth import get_user_model
+import os
+
+User = get_user_model()
+
+username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
+email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
+password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
+
+user, created = User.objects.get_or_create(
+    username=username,
+    defaults={"email": email}
+)
+
+user.is_staff = True
+user.is_superuser = True
+user.set_password(password)
+user.save()
+
+print("Admin user ready")
+EOF
 
 echo "Starting Gunicorn..."
 gunicorn asset_management.wsgi:application
