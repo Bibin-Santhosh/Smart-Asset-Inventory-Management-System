@@ -92,7 +92,9 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "authorization",
     "content-type",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = False
+CORS_REPLACE_HTTPS_REFERER = True
 # --------------------------------------------------
 # CSRF CONFIGURATION
 # --------------------------------------------------
