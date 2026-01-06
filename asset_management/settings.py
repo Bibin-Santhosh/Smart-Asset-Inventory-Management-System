@@ -65,7 +65,7 @@ REST_FRAMEWORK = {
 # MIDDLEWARE (ORDER IS CRITICAL)
 # --------------------------------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # MUST BE FIRST
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
@@ -79,10 +79,10 @@ MIDDLEWARE = [
 ]
 
 # --------------------------------------------------
-# CORS CONFIGURATION (FINAL & CORRECT)
+# CORS CONFIGURATION (JWT – NO COOKIES)
 # --------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = False  # JWT does NOT use cookies
+CORS_ALLOW_CREDENTIALS = False
 
 CORS_ALLOWED_ORIGINS = [
     "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
@@ -92,15 +92,22 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "authorization",
     "content-type",
 ]
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = False
 
 # --------------------------------------------------
-# CSRF CONFIGURATION
+# CSRF & RAILWAY HTTPS CONFIGURATION
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
+    "https://smart-asset-inventory-management-system-production.up.railway.app",
     "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
 ]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
 
 # --------------------------------------------------
 # URLS & TEMPLATES
