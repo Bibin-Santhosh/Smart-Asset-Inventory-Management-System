@@ -483,21 +483,3 @@ def technician_recent_activity(request):
         for activity in activities
     ])
 
-from django.contrib.auth import authenticate
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def debug_login_test(request):
-    user = authenticate(
-        request,
-        username=request.data.get("username"),
-        password=request.data.get("password"),
-    )
-
-    if user:
-        return Response({"result": "AUTH_SUCCESS", "user": user.username})
-    else:
-        return Response({"result": "AUTH_FAILED"})

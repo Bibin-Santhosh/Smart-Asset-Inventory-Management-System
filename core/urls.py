@@ -17,7 +17,6 @@ from .views import (
     technician_dashboard,
     update_ticket_status,
     technician_recent_activity,
-    debug_login_test,
     AssetViewSet,
     InventoryViewSet,
     AssignmentViewSet,
@@ -59,7 +58,7 @@ urlpatterns = [
     update_ticket_status,
 ),
 path("api/technician/recent-activity/", technician_recent_activity),
-path("api/debug-login/", debug_login_test),
+
 
 
 
