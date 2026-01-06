@@ -16,7 +16,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # --------------------------------------------------
 SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-fallback-key")
-
 DEBUG = False
 
 ALLOWED_HOSTS = [
@@ -24,9 +23,10 @@ ALLOWED_HOSTS = [
 ]
 
 # --------------------------------------------------
-# APPLICATIONS
+# APPLICATIONS (ORDER MATTERS)
 # --------------------------------------------------
 INSTALLED_APPS = [
+    "corsheaders",                     # ✅ MUST BE FIRST
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -34,13 +34,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "core",
     "rest_framework",
-    "corsheaders",
+    "core",
 ]
 
 # --------------------------------------------------
-# AUTH CONFIG (CUSTOM USER)
+# AUTH CONFIG
 # --------------------------------------------------
 AUTH_USER_MODEL = "core.User"
 
@@ -61,10 +60,10 @@ REST_FRAMEWORK = {
 }
 
 # --------------------------------------------------
-# MIDDLEWARE (ORDER IS IMPORTANT)
+# MIDDLEWARE (ORDER MATTERS)
 # --------------------------------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # ✅ MUST BE FIRST
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
@@ -77,7 +76,7 @@ MIDDLEWARE = [
 ]
 
 # --------------------------------------------------
-# CORS CONFIGURATION (FIXED)
+# CORS CONFIGURATION
 # --------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
@@ -88,8 +87,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
-    "content-type",
     "authorization",
+    "content-type",
 ]
 
 # --------------------------------------------------
@@ -103,7 +102,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-
 CSRF_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SAMESITE = "None"
 
@@ -131,7 +129,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "asset_management.wsgi.application"
 
 # --------------------------------------------------
-# DATABASE (POSTGRES FROM RAILWAY)
+# DATABASE
 # --------------------------------------------------
 DATABASES = {
     "default": dj_database_url.config(
@@ -160,11 +158,10 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC FILES (WHITENOISE)
+# STATIC FILES
 # --------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # --------------------------------------------------
