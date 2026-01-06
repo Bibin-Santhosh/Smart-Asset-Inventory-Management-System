@@ -20,6 +20,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     ".railway.app",
+    "smart-asset-inventory-management-system-production.up.railway.app",
 ]
 
 # --------------------------------------------------
