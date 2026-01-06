@@ -5,9 +5,10 @@ Django settings for asset_management project.
 import os
 from pathlib import Path
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 # --------------------------------------------------
-# BASE
+# BASE DIRECTORY
 # --------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
 ]
 
 # --------------------------------------------------
-# AUTH CONFIG (CRITICAL)
+# AUTH CONFIG (CUSTOM USER)
 # --------------------------------------------------
 AUTH_USER_MODEL = "core.User"
 
@@ -48,7 +49,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # --------------------------------------------------
-# REST FRAMEWORK
+# DJANGO REST FRAMEWORK
 # --------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -60,7 +61,7 @@ REST_FRAMEWORK = {
 }
 
 # --------------------------------------------------
-# MIDDLEWARE (ORDER MATTERS)
+# MIDDLEWARE (ORDER IS IMPORTANT)
 # --------------------------------------------------
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -76,7 +77,7 @@ MIDDLEWARE = [
 ]
 
 # --------------------------------------------------
-# CORS & CSRF (FIXED)
+# CORS CONFIGURATION (FIXED)
 # --------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
@@ -86,6 +87,14 @@ CORS_ALLOWED_ORIGINS = [
     "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
 ]
 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "content-type",
+    "authorization",
+]
+
+# --------------------------------------------------
+# CSRF CONFIGURATION
+# --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     "https://asset-frontend.vercel.app",
     "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
@@ -122,7 +131,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "asset_management.wsgi.application"
 
 # --------------------------------------------------
-# DATABASE
+# DATABASE (POSTGRES FROM RAILWAY)
 # --------------------------------------------------
 DATABASES = {
     "default": dj_database_url.config(
@@ -151,10 +160,11 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC FILES
+# STATIC FILES (WHITENOISE)
 # --------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # --------------------------------------------------
