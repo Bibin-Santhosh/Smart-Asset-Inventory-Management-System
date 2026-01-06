@@ -186,7 +186,7 @@ def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
-    user = authenticate(username=username, password=password)
+    user = authenticate(request,username=username, password=password)
 
     if user is None:
         return Response(
