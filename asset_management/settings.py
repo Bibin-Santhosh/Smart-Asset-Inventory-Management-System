@@ -24,10 +24,11 @@ ALLOWED_HOSTS = [
 ]
 
 # --------------------------------------------------
-# APPLICATIONS (ORDER MATTERS)
+# APPLICATIONS
 # --------------------------------------------------
 INSTALLED_APPS = [
-    "corsheaders",                     # ✅ MUST BE FIRST
+    "corsheaders",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,15 +62,16 @@ REST_FRAMEWORK = {
 }
 
 # --------------------------------------------------
-# MIDDLEWARE (ORDER MATTERS)
+# MIDDLEWARE (ORDER IS CRITICAL)
 # --------------------------------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # ✅ MUST BE FIRST
+    "corsheaders.middleware.CorsMiddleware",  # MUST BE FIRST
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -77,14 +79,13 @@ MIDDLEWARE = [
 ]
 
 # --------------------------------------------------
-# CORS CONFIGURATION
+# CORS CONFIGURATION (FINAL & CORRECT)
 # --------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False  # JWT does NOT use cookies
 
 CORS_ALLOWED_ORIGINS = [
-    "https://asset-frontend.vercel.app",
-    "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
+    "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
@@ -96,15 +97,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 # CSRF CONFIGURATION
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
-    "https://asset-frontend.vercel.app",
-    "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
-    "https://smart-asset-inventory-management-system-production.up.railway.app",
+    "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
 ]
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SAMESITE = "None"
 
 # --------------------------------------------------
 # URLS & TEMPLATES
