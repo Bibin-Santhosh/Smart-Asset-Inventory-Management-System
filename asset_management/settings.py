@@ -67,14 +67,16 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ALLOWED_ORIGINS = [
     "https://asset-frontend.vercel.app",
+    "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://asset-frontend.vercel.app",
+    "https://asset-frontend-8957ertrf-bibin-santhoshs-projects.vercel.app",
 ]
+
 
 SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True
