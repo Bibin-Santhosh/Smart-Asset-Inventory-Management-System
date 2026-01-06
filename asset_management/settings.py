@@ -7,9 +7,6 @@ from pathlib import Path
 import dj_database_url
 from corsheaders.defaults import default_headers
 
-# --------------------------------------------------
-# BASE DIRECTORY
-# --------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --------------------------------------------------
@@ -20,7 +17,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     ".railway.app",
-    "smart-asset-inventory-management-system-production.up.railway.app",
 ]
 
 # --------------------------------------------------
@@ -41,16 +37,12 @@ INSTALLED_APPS = [
 ]
 
 # --------------------------------------------------
-# AUTH CONFIG
+# AUTH
 # --------------------------------------------------
 AUTH_USER_MODEL = "core.User"
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-]
-
 # --------------------------------------------------
-# DJANGO REST FRAMEWORK
+# DRF + JWT
 # --------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -62,10 +54,10 @@ REST_FRAMEWORK = {
 }
 
 # --------------------------------------------------
-# MIDDLEWARE (ORDER IS CRITICAL)
+# MIDDLEWARE (ORDER MATTERS)
 # --------------------------------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",   # MUST BE FIRST
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
@@ -79,14 +71,16 @@ MIDDLEWARE = [
 ]
 
 # --------------------------------------------------
-# CORS CONFIGURATION (JWT – NO COOKIES)
+# ✅ CORS (THIS FIXES YOUR ERROR)
 # --------------------------------------------------
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = False
 
-CORS_ALLOWED_ORIGINS = [
-    "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
+# Allow ALL vercel subdomains
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
 ]
+
+CORS_ALLOW_CREDENTIALS = False  # JWT does not use cookies
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "authorization",
@@ -94,20 +88,20 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
 
 # --------------------------------------------------
-# CSRF & RAILWAY HTTPS CONFIGURATION
+# CSRF (API DOES NOT NEED IT, BUT ADMIN DOES)
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
-    "https://smart-asset-inventory-management-system-production.up.railway.app",
-    "https://smart-asset-frontend-6jum3gazi-bibin-santhoshs-projects.vercel.app",
+    "https://*.vercel.app",
+    "https://*.railway.app",
 ]
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-USE_X_FORWARDED_HOST = True
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SAMESITE = "None"
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 # --------------------------------------------------
 # URLS & TEMPLATES
@@ -144,24 +138,6 @@ DATABASES = {
 }
 
 # --------------------------------------------------
-# PASSWORD VALIDATION
-# --------------------------------------------------
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
-
-# --------------------------------------------------
-# INTERNATIONALIZATION
-# --------------------------------------------------
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
-USE_I18N = True
-USE_TZ = True
-
-# --------------------------------------------------
 # STATIC FILES
 # --------------------------------------------------
 STATIC_URL = "/static/"
@@ -169,6 +145,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # --------------------------------------------------
-# DEFAULT PRIMARY KEY
+# DEFAULT PK
 # --------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
