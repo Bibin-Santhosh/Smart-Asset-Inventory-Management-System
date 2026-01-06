@@ -173,25 +173,18 @@ def change_password(request):
         {"success": "Password changed successfully"},
         status=status.HTTP_200_OK
     )
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
-@csrf_exempt
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
-
-    if not username or not password:
-        return Response(
-            {"error": "Username and password required"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
 
     user = authenticate(username=username, password=password)
 
@@ -203,11 +196,15 @@ def login_view(request):
 
     refresh = RefreshToken.for_user(user)
 
+    # ✅ ADD ROLE INTO TOKEN PAYLOAD
+    refresh["role"] = user.role
+    refresh["username"] = user.username
+
     return Response({
         "access": str(refresh.access_token),
         "refresh": str(refresh),
-        "username": user.username,
     })
+
 
 
 from rest_framework_simplejwt.views import TokenObtainPairView
