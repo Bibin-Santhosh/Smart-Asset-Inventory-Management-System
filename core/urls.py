@@ -21,6 +21,7 @@ from .views import (
     InventoryViewSet,
     AssignmentViewSet,
     RepairTicketViewSet,
+    CreateUserView,
 )
 
 router = DefaultRouter()
@@ -36,6 +37,7 @@ urlpatterns = [
     path("api/profile/", profile_view),
     path("api/change-password/", change_password),
     path("api/users/", users_list),
+    path("api/users/create/", CreateUserView.as_view()),
 
     # ---------- DASHBOARD ----------
     path("api/dashboard/", dashboard_stats),

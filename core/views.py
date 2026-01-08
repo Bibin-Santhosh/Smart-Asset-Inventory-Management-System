@@ -18,7 +18,25 @@ from .serializers import (
     RepairTicketSerializer,
 )
 
-User = get_user_model()  # ✅ CORRECT USER MODEL
+from rest_framework import generics, permissions
+from .serializers import UserCreateSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
+
+    # 🔐 ONLY ADMIN CAN CREATE USERS
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if self.request.user.role != "ADMIN":
+            raise PermissionError("Only admin can create users")
+        serializer.save()
+
+
 
 
 # =======================
